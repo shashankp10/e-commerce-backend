@@ -4,6 +4,7 @@ import com.urbanbazaar.DTO.UserAuthDto;
 import com.urbanbazaar.Entity.UserAuth;
 import com.urbanbazaar.Repo.jpa.UserAuthRepo;
 import com.urbanbazaar.Service.UserAuthService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class UserAuthServiceImpl implements UserAuthService {
     private UserAuthRepo userRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public void createUser(UserAuthDto userDto) {
 //        if (userRepo.existsByEmail(userDto.getEmail())) {
@@ -63,7 +66,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public boolean authenticateUser(String email, String password) {
         Optional<UserAuth> optionalUser = userRepo.findByEmail(email);
         if (!optionalUser.isPresent()) {
-            return false; // User not found
+            return false;
         }
 
         UserAuth user = optionalUser.get();
@@ -71,10 +74,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     private UserAuthDto convertUserToDto(UserAuth user) {
-        UserAuthDto dto = new UserAuthDto();
-        dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
-        dto.setRoles(user.getRoles());
+        UserAuthDto dto = this.modelMapper.map(user, UserAuthDto.class);
         return dto;
     }
 }

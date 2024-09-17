@@ -1,9 +1,11 @@
 package com.urbanbazaar.Service.Impl;
 
 import com.urbanbazaar.DTO.ProductDto;
+import com.urbanbazaar.DTO.UserAuthDto;
 import com.urbanbazaar.Entity.Product;
 import com.urbanbazaar.Repo.mongo.ProductRepo;
 import com.urbanbazaar.Service.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -25,25 +29,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto updateUser(ProductDto productDto, String productId) {
-        Optional<Product> optionalProduct = productRepo.findById(productId);
-        if (!optionalProduct.isPresent()) {
-            return null;
-        }
-
-        Product product = optionalProduct.get();
-        product.setTitle(productDto.getTitle());
-        product.setDescription(productDto.getDescription());
-        product.setCategory(productDto.getCategory());
-        product.setSubcategory(productDto.getSubcategory());
-        product.setBrand(productDto.getBrand());
-        product.setPrice(productDto.getPrice());
-        product.setQuantity(productDto.getQuantity());
-        product.setAvailable(productDto.isAvailable());
-        product.setUrl(productDto.getUrl());
-        product.setReviews(productDto.getReviews());
-
-        product = productRepo.save(product);
-        return convertEntityToDto(product);
+        return productRepo.findById(productId)
+                .map(existingProduct -> {
+                    modelMapper.map(productDto, existingProduct);
+                    Product updatedProduct = productRepo.save(existingProduct);
+                    return convertEntityToDto(updatedProduct);
+                })
+                .orElse(null);
     }
     @Override
     public List<ProductDto> getProducts() {
@@ -86,34 +78,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductDto convertEntityToDto(Product product) {
-        ProductDto dto = new ProductDto();
-        dto.setId(product.getId());
-        dto.setTitle(product.getTitle());
-        dto.setDescription(product.getDescription());
-        dto.setCategory(product.getCategory());
-        dto.setSubcategory(product.getSubcategory());
-        dto.setBrand(product.getBrand());
-        dto.setPrice(product.getPrice());
-        dto.setQuantity(product.getQuantity());
-        dto.setAvailable(product.isAvailable());
-        dto.setUrl(product.getUrl());
-        dto.setReviews(product.getReviews());
+        ProductDto dto = this.modelMapper.map(product, ProductDto.class);
         return dto;
     }
 
     private Product convertDtoToEntity(ProductDto dto) {
-        Product product = new Product();
-        product.setId(dto.getId());
-        product.setTitle(dto.getTitle());
-        product.setDescription(dto.getDescription());
-        product.setCategory(dto.getCategory());
-        product.setSubcategory(dto.getSubcategory());
-        product.setBrand(dto.getBrand());
-        product.setPrice(dto.getPrice());
-        product.setQuantity(dto.getQuantity());
-        product.setAvailable(dto.isAvailable());
-        product.setUrl(dto.getUrl());
-        product.setReviews(dto.getReviews());
+        Product product = this.modelMapper.map(dto, Product.class);
         return product;
     }
 }

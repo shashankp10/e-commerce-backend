@@ -5,6 +5,7 @@ import com.urbanbazaar.Entity.Product;
 import com.urbanbazaar.Entity.Reviews;
 import com.urbanbazaar.Repo.mongo.ProductRepo;
 import com.urbanbazaar.Service.ReviewService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public ReviewsDto addReview(String productId, ReviewsDto reviewDto) {
@@ -60,12 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private Reviews convertDtoToEntity(ReviewsDto dto) {
-        Reviews review = new Reviews();
-        review.setId(dto.getId());
-        review.setName(dto.getName());
-        review.setRating(dto.getRating());
-        review.setFeedback(dto.getFeedback());
-        review.setDate(dto.getDate());
+        Reviews review =this.modelMapper.map(dto, Reviews.class);
         return review;
     }
 
