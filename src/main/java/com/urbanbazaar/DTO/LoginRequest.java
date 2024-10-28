@@ -2,7 +2,6 @@ package com.urbanbazaar.DTO;
 
 import lombok.Data;
 
-import java.util.Set;
 
 @Data
 public class LoginRequest {

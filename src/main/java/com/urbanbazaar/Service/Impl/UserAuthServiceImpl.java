@@ -26,6 +26,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 //        }
         UserAuth user = new UserAuth();
         user.setEmail(userDto.getEmail());
+        user.setName(userDto.getName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRoles(userDto.getRoles());
         userRepo.save(user);
@@ -40,6 +41,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         UserAuth user = optionalUser.get();
         user.setEmail(user.getEmail());
+        user.setName(user.getName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(user.getRoles());
         UserAuth updatedUser = userRepo.save(user);
