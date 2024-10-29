@@ -1,6 +1,5 @@
 package com.urbanbazaar.DTO;
 
-import com.urbanbazaar.Entity.Reviews;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -19,5 +18,5 @@ public class ProductDto {
     private long quantity;
     private boolean isAvailable;
     private List<String> url;
-    private List<Reviews> reviews;
+//    private List<Reviews> reviews;
 }

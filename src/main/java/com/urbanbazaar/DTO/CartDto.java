@@ -1,9 +1,13 @@
 package com.urbanbazaar.DTO;
 
+import com.urbanbazaar.Entity.Product;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Data
 public class CartDto {

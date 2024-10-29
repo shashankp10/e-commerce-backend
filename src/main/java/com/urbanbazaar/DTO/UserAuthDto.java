@@ -12,5 +12,8 @@ public class UserAuthDto {
     private String name;
     private String email;
     private String password;
+    private String gender;
+    private String address;
+    private String phone;
     private String roles;
 }

@@ -1,9 +1,6 @@
 package com.urbanbazaar.Entity;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +14,10 @@ import java.util.*;
 @Document(collection = "product")
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Product {
     @Id
-    private String id;
+    private String product_id;
     private String title;
     private HashMap<String,String> description;
     private String category;
@@ -29,11 +27,11 @@ public class Product {
     private long quantity;
     private boolean isAvailable;
     private List<String> url;
-    private List<Reviews> reviews;
+
     @PrePersist
     protected void onCreate() {
-        if (id == null) {
-            id = UUID.randomUUID().toString();
+        if (product_id == null) {
+            product_id = UUID.randomUUID().toString();
         }
     }
 }

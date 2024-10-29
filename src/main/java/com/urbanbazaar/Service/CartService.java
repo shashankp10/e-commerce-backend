@@ -1,6 +1,9 @@
 package com.urbanbazaar.Service;
 
 import com.urbanbazaar.DTO.CartDto;
+import com.urbanbazaar.DTO.ProductDto;
+import com.urbanbazaar.Entity.Cart;
+import com.urbanbazaar.Entity.Product;
 
 import java.util.List;
 
